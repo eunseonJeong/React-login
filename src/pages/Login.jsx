@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import UseInput from '../components/UseInput'
 import { apis } from "../shared/axios";
 import { cookies } from "../shared/cookie";
+import jwt_decode from "jwt-decode";
 // import * as Input from '../components/Input';
 
 const Login = () => {
@@ -25,8 +26,13 @@ const Login = () => {
     //post 요청 보내기
 
     try{
-      const result = await apis.post('/login', user)
+      const result = await apis.post('/login', user);
+      const payload = jwt_decode(result.data.token);
+
+      console.log(payload);
+
       cookies.set("token", result.data.token, {path:"/"})
+
       navi('/home')
   }
     catch (error) {
